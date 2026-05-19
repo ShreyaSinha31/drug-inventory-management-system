@@ -1,0 +1,210 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.dash {
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+.content {
+    flex: 1;
+    width: 85vw;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 20px; /* Added padding for better spacing */
+}
+
+.content .heading {
+    height: auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.5%;
+}
+
+.content .heading .head {
+    width: 40%;
+    padding: 0 65px;
+    margin-left: 2.75%;
+}
+
+.head p {
+    font-size: 0.8rem;
+    margin-top: -2%;
+}
+
+.content .details {
+    min-height: 20vh;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 10px;
+}
+
+.content .details .card {
+    height: 80%;
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.up:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.card .info {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 10px;
+}
+
+.card .info .icon {
+    height: 87%;
+    width: 30%;
+    border-radius: 50%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5%;
+    margin-left: -5%;
+}
+
+.icon i {
+    font-size: 2.5rem;
+}
+
+.card .info .about p {
+    margin-left: 0%;
+    color: white;
+}
+
+.card .info .about h2 {
+    color: white;
+}
+
+.know {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10%;
+    font-size: 0.8rem;
+}
+
+.know p {
+    color: white;
+}
+
+.chart {
+    min-height: 40vh;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 10px;
+    margin-bottom: 1.5%;
+}
+
+.chart .bargraph,
+.chart .piechart {
+    height: 100%;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.mup:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    border: none;
+}
+
+.recived {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.pro {
+    width: 93%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.pro h2 {
+    margin-top: 1%;
+}
+
+.pro .header,
+.pro .all {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 10px;
+    padding: 10px 50px;
+    margin-bottom: 1%;
+}
+
+.pro .header {
+    background-color: #329dff;
+}
+
+.pro .header h4 {
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    flex: 1;
+    text-align: center;
+    margin: 0;
+}
+
+.pro .all {
+    background-color: #ddd;
+}
+
+.pro .all h5 {
+    color: #000;
+    font-size: 0.8rem;
+    font-weight: 600;
+    flex: 1;
+    text-align: center;
+    margin: 0;
+}
+
+.pro .all h5:first-child,
+.pro .header h4:first-child {
+    text-align: left;
+}
+
+.pro .all h5:last-child,
+.pro .header h4:last-child {
+    text-align: right;
+}
+
+/* Add this for nested route content */

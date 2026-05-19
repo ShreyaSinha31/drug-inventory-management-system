@@ -1,0 +1,89 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.nbar{
+    height:10vh;
+    width:85vw;
+    background-color: #FCF7F8;
+    position: fixed;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.search{
+    height: 100%;
+    width:50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.search input{
+    height: 50%;
+    width: 80%;
+    border: none;
+    outline: none;
+    padding: 10px;
+    font-size: 0.8rem;
+    border-radius: 10px;
+    background-color: #ddd;
+    font-weight:500;
+}
+.search i{
+    position: fixed;
+    right: 48%;
+    cursor: pointer;
+}
+.option{
+    height: 100%;
+    width: 17.5%;
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+}
+.option i{
+    font-size: 1.5rem;
+    color: #313133;
+    cursor: pointer;
+}
+.option p{
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #313133;
+    cursor: pointer;
+    margin-left: -12%;
+}
+.profile{
+    height: 100%;
+    width: 20%;
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+}
+.profile .picture{
+    height: 70%;
+    width:27.5%;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.picture img{
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+}
+.profile .info{
+    height: 80%;
+    width: 50%;
+    display: flex;
+    align-items: flex-start;
+}
+.info p{
+    margin-left: 5%;
+    margin-top: 10%;
+    font-weight: 600;
+    font-size: 1.2rem;
+}

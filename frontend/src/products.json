@@ -1,0 +1,227 @@
+[
+    {
+        "name": "Paracetamol",
+        "description": "Pain reliever and fever reducer",
+        "price": 2.5,
+        "quantity": 100,
+        "category": "Pain Relief",
+        "createdAt": "2025-01-31",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Ibuprofen",
+        "description": "Nonsteroidal anti-inflammatory drug (NSAID)",
+        "price": 3.0,
+        "quantity": 50,
+        "category": "Pain Relief",
+        "createdAt": "2025-01-31",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Amoxicillin",
+        "description": "Antibiotic used to treat bacterial infections",
+        "price": 10.0,
+        "quantity": 75,
+        "category": "Antibiotics",
+        "createdAt": "2025-01-31",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Cetirizine",
+        "description": "Antihistamine for allergies",
+        "price": 5.0,
+        "quantity": 150,
+        "category": "Allergy",
+        "createdAt": "2025-01-31",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Omeprazole",
+        "description": "Proton pump inhibitor for acid reflux",
+        "price": 8.0,
+        "quantity": 60,
+        "category": "Digestive Health",
+        "createdAt": "2025-01-31",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Ibuprofen",
+        "description": "Anti-inflammatory and pain reliever",
+        "price": 3.0,
+        "quantity": 150,
+        "category": "Pain Relief",
+        "createdAt": "2025-02-01",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Aspirin",
+        "description": "Blood thinner and pain reliever",
+        "price": 1.8,
+        "quantity": 200,
+        "category": "Pain Relief",
+        "createdAt": "2025-02-02",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Cetirizine",
+        "description": "Antihistamine for allergies",
+        "price": 4.5,
+        "quantity": 120,
+        "category": "Allergy",
+        "createdAt": "2025-02-03",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Omeprazole",
+        "description": "Acid reducer for heartburn",
+        "price": 5.2,
+        "quantity": 90,
+        "category": "Digestive Health",
+        "createdAt": "2025-02-04",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Loratadine",
+        "description": "Non-drowsy allergy relief",
+        "price": 3.7,
+        "quantity": 130,
+        "category": "Allergy",
+        "createdAt": "2025-02-05",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Vitamin C",
+        "description": "Immune system support",
+        "price": 6.0,
+        "quantity": 300,
+        "category": "Vitamins",
+        "createdAt": "2025-02-06",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Metformin",
+        "description": "Diabetes medication",
+        "price": 7.5,
+        "quantity": 80,
+        "category": "Diabetes",
+        "createdAt": "2025-02-07",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Amoxicillin",
+        "description": "Antibiotic for bacterial infections",
+        "price": 8.0,
+        "quantity": 60,
+        "category": "Antibiotics",
+        "createdAt": "2025-02-08",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Simvastatin",
+        "description": "Cholesterol-lowering medication",
+        "price": 9.2,
+        "quantity": 70,
+        "category": "Cardiovascular",
+        "createdAt": "2025-02-09",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Diphenhydramine",
+        "description": "Antihistamine for sleep aid",
+        "price": 2.0,
+        "quantity": 180,
+        "category": "Sleep Aid",
+        "createdAt": "2025-02-10",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Calcium Carbonate",
+        "description": "Calcium supplement for bones",
+        "price": 4.8,
+        "quantity": 250,
+        "category": "Vitamins",
+        "createdAt": "2025-02-11",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Diazepam",
+        "description": "Anti-anxiety medication",
+        "price": 10.5,
+        "quantity": 50,
+        "category": "Mental Health",
+        "createdAt": "2025-02-12",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Hydrochlorothiazide",
+        "description": "Diuretic for high blood pressure",
+        "price": 3.3,
+        "quantity": 110,
+        "category": "Cardiovascular",
+        "createdAt": "2025-02-13",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Fluoxetine",
+        "description": "Antidepressant medication",
+        "price": 6.7,
+        "quantity": 85,
+        "category": "Mental Health",
+        "createdAt": "2025-02-14",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Lisinopril",
+        "description": "Blood pressure medication",
+        "price": 5.5,
+        "quantity": 95,
+        "category": "Cardiovascular",
+        "createdAt": "2025-02-15",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Ranitidine",
+        "description": "Acid reducer for stomach ulcers",
+        "price": 4.0,
+        "quantity": 140,
+        "category": "Digestive Health",
+        "createdAt": "2025-02-16",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Atorvastatin",
+        "description": "Cholesterol-lowering medication",
+        "price": 8.8,
+        "quantity": 75,
+        "category": "Cardiovascular",
+        "createdAt": "2025-02-17",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Ciprofloxacin",
+        "description": "Antibiotic for bacterial infections",
+        "price": 7.0,
+        "quantity": 65,
+        "category": "Antibiotics",
+        "createdAt": "2025-02-18",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Zinc Supplements",
+        "description": "Immune system support",
+        "price": 5.9,
+        "quantity": 220,
+        "category": "Vitamins",
+        "createdAt": "2025-02-19",
+        "expdate": "2025-02-02"
+    },
+    {
+        "name": "Melatonin",
+        "description": "Sleep aid and circadian rhythm regulator",
+        "price": 3.5,
+        "quantity": 170,
+        "category": "Sleep Aid",
+        "createdAt": "2025-02-20",
+        "expdate": "2025-02-02"
+    }
+]
