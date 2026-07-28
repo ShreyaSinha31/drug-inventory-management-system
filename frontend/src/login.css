@@ -14,7 +14,7 @@ input {
 .container {
   position: relative;
   width: 100%;
-  background-color: #fff;
+  background-color: var(--bg-primary);
   min-height: 100vh;
   overflow: hidden;
 }
@@ -62,14 +62,14 @@ form.sign-in-form {
 
 .title {
   font-size: 2.2rem;
-  color: #444;
+  color: var(--text-primary);
   margin-bottom: 10px;
 }
 
 .input-field {
   max-width: 380px;
   width: 100%;
-  background-color: #f0f0f0;
+  background-color: var(--bg-input);
   margin: 10px 0;
   height: 55px;
   border-radius: 55px;
@@ -78,10 +78,11 @@ form.sign-in-form {
   place-items: center;
   padding: 0 0.4rem;
   position: relative;
+  border: 1px solid var(--border-color);
 }
 
 .icon {
-  color: #b51271;
+  color: #329dff;
   transition: 0.5s;
   font-size: 1.1rem;
 }
@@ -92,19 +93,22 @@ form.sign-in-form {
   border: none;
   line-height: 1;
   font-weight: 600;
-  font-size: 1.1rem;
-  color: #333;
+  font-size: 1rem;
+  color: var(--text-primary);
+  width: 100%;
 }
 
 .input-field input::placeholder {
-  color: #aaa;
+  color: var(--text-muted);
   font-weight: 500;
 }
 
 .social-text {
   padding: 0.7rem 0;
   font-size: 1rem;
+  color: var(--text-primary);
 }
+
 
 .social-media {
   display: flex;

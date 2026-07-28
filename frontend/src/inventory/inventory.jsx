@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import "./inventory.css";
-//all work have been done through the name of the database being products just change every instance of "products" to your respective database
 import iname from "../assets/name.jpg";
 import idesc from "../assets/desc.jpg";
 import iprice from "../assets/price.jpg";
@@ -9,9 +8,11 @@ import ictg from "../assets/category.jpg";
 import imdate from "../assets/mdate.jpg";
 import iedate from "../assets/edate.jpg";
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import moment from 'moment';
+import api from '../api/axios';
 import ProductForm from './ProductForm.jsx';
+import moment from 'moment';
+import toast from 'react-hot-toast';
+
 
 //sorting and filter have been done 
 
@@ -47,7 +48,6 @@ export default function Inventory() {
     const [formMode, setFormMode] = useState("create"); // or "update", "delete"
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [products, setProducts] = useState([]);
-    //const [error, setError] = useState('');
     const [totalQuantity, setTotalQuantity] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const [lowStockCount, setLowStockCount] = useState(0);
@@ -55,33 +55,28 @@ export default function Inventory() {
 
   const naviagate = useNavigate();//frontend
 
-  useEffect(() => {
-    // Fetch products on component mount
-    const fetchProducts = async () => {
-      try {
-        // Sending GET request to fetch products from the backend
-        const response = await axios.get('https://med-track.onrender.com/api/products', {
-          withCredentials: true, // Ensure cookies (including token) are sent with request
-        });
-          console.log("API Response:", response.data); // Debugging
-          // console.log(response.data.totalPrice);
-          // console.log(response.data.totalQuantity);
-          
-            setProducts(response.data.products || []);
-            setTotalQuantity(response.data.totalQuantity || 0);
-            setTotalPrice(response.data.totalPrice || 0);
-            setLowStockCount(response.data.lowStockCount || 0); // Set low stock count state
-            setOutOfStockCount(response.data.outOfStockCount || 0);
-            
-      } catch (error) {
-        // Handle error, if any
-        console.error("Error fetching products:", error);
-        setError("Failed to fetch products. Please try again later.");
-      }
-    };
+  const refreshProducts = async () => {
+    try {
+      const response = await api.get('/products');
+      setProducts(response.data.products || []);
+      setTotalQuantity(response.data.totalQuantity || 0);
+      setTotalPrice(response.data.totalPrice || 0);
+      setLowStockCount(response.data.lowStockCount || 0);
+      setOutOfStockCount(response.data.outOfStockCount || response.data.outOfstockCount || 0);
+      setDisplay([]);
+      setTable(0);
+      setError(0);
+      setIndextab(-1);
+    } catch (err) {
+      console.error("Error fetching products:", err);
+    }
+  };
 
-    fetchProducts(); // Call the function to fetch products
+
+  useEffect(() => {
+    refreshProducts();
   }, []);
+
 
   const totalmed = products.length; // total no. of medicine in stock
     let instock = products.filter(p=>p.quantity >75).length;//to check medicines in the stock
@@ -194,28 +189,22 @@ export default function Inventory() {
         // Handler when a table row is clicked
         const handleRowClick = (product) => {
             setSelectedProduct(product);
-            // Set mode if you need to distinguish between update and delete.
             setFormMode("update");
             setShowForm(true);
         };
-        // handler to refresh products list after any operation
-        const refreshProducts = async () => {
+
+        const handleDeleteProduct = async (e, productId, productName) => {
+            e.stopPropagation();
+            if (!window.confirm(`Are you sure you want to delete '${productName}' from inventory?`)) return;
             try {
-              const response = await axios.get('https://med-track.onrender.com/api/products', {
-                withCredentials: true, // ensure cookies (like JWT tokens) are sent
-              });
-              // Assuming your API returns an object with a "products" field:
-              setProducts(response.data.products);
-            } catch (error) {
-              console.error("Error refreshing products:", error);
+                await api.delete(`/products/${productId}`);
+                toast.success("✅ Product Deleted Successfully!");
+                refreshProducts();
+            } catch (err) {
+                toast.error(err.response?.data?.message || "❌ Failed to delete product");
             }
-          };
-        
-          // Fetch products on component mount.
-          useEffect(() => {
-            refreshProducts();
-          }, []);
-      
+        };
+
 //code getting the searched medicine
     const find = () => {
         if (search !== "") {
@@ -348,15 +337,20 @@ export default function Inventory() {
                 <div className="invsearch">
                     <h1>Inventory</h1>
                 {/*Add item button*/}
-                    <button className="additem" onClick={() => { setFormMode("create"); setShowForm(true); }}>Add Product</button>
-                            {showForm && (
+                    <button className="additem" onClick={() => { setSelectedProduct(null); setFormMode("create"); setShowForm(true); }}>Add Product</button>
+                    {showForm && (
+                        <div className="profile-modal-overlay" onClick={() => { setShowForm(false); setSelectedProduct(null); }}>
+                            <div onClick={(e) => e.stopPropagation()}>
                                 <ProductForm
+                                key={formMode + (selectedProduct?._id || 'new')}
                                 mode={formMode}
                                 initialProduct={selectedProduct}
-                                onClose={() => setShowForm(false)}
+                                onClose={() => { setShowForm(false); setSelectedProduct(null); }}
                                 refreshProducts={refreshProducts}
                                 />
-                            )}
+                            </div>
+                        </div>
+                    )}
 
                     <div className="search" style={{ marginLeft: "45%" }}>
                         <input
@@ -380,47 +374,15 @@ export default function Inventory() {
                         {/*If no medecine found in filter or search the table heading doesn't shows*/ }
                 {error === 0 && (
                     <div className="tablehead">
-                        <h2>Sl No.</h2>
-                        <h2 style={{ marginLeft: "9%" }}>
-                            Name{' '}
-                            <span>
-                                <i
-                                    className="fa-solid fa-sort"
-                                    style={{ color: "white", cursor: "pointer" }}
-                                    onClick={() => setSort(1)}
-                                ></i>
-                            </span>
-                        </h2>
-                        <h2 style={{ marginRight: "1%" }}>
-                            Price{' '}
-                            <span>
-                                <i
-                                    className="fa-solid fa-sort"
-                                    style={{ color: "white", cursor: "pointer" }}
-                                    onClick={() => setSort(2)}
-                                ></i>
-                            </span>
-                        </h2>
-                        <h2>
-                            Qty.{' '}
-                            <span>
-                                <i
-                                    className="fa-solid fa-sort"
-                                    style={{ color: "white", cursor: "pointer" }}
-                                    onClick={() => setSort(3)}
-                                ></i>
-                            </span>
-                        </h2>
-                        <h2>
-                            Expiry{' '}
-                            <span>
-                                <i
-                                    className="fa-solid fa-sort"
-                                    style={{ color: "white", cursor: "pointer" }}
-                                    onClick={() => setSort(4)}
-                                ></i>
-                            </span>
-                        </h2>
+                        <h2>Drug ID</h2>
+                        <h2>Product Name</h2>
+                        <h2>Category</h2>
+                        <h2>Price</h2>
+                        <h2>Qty</h2>
+                        <h2>Supplier</h2>
+                        <h2>Batch</h2>
+                        <h2>Expiry</h2>
+                        <h2>Actions</h2>
                     </div>
                 )}
                 {/*This div displays all the medecine no filter or search applied just change the "products" to your database*/ }
@@ -428,32 +390,41 @@ export default function Inventory() {
                     {products.map((product, index) => (
                       <div
                         className="tablecont"
-                        key={product._id}  // Use a unique id as the key
+                        key={product._id}
                         onClick={() => handleRowClick(product)}
-                        style={{ cursor: "pointer", padding: "10px", borderBottom: "1px solid #ccc" }}
+                        style={{ cursor: "pointer", padding: "10px", borderBottom: "1px solid var(--border-color)" }}
                       >
-                        <h5>{index + 1}</h5>
+                        <h5>{product.drugId || `DRUG-${index+100}`}</h5>
                         <h5>{product.name}</h5>
+                        <h5>{product.category || "General"}</h5>
                         <h5>{'\u20B9'}{product.price}</h5>
                         <h5>{product.quantity}</h5>
+                        <h5>{product.supplier || "Standard Pharma"}</h5>
+                        <h5>{product.batchNumber || `BATCH-${index+10}`}</h5>
                         <h5>{moment(product.expDate).format("DD-MM-YYYY")}</h5>
+                        <h5 style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleRowClick(product); }}
+                            style={{ background: "#329dff", border: "none", color: "#fff", padding: "4px 8px", borderRadius: "4px", cursor: "pointer" }}
+                            title="Edit Product"
+                          >
+                            <i className="fa-solid fa-pen-to-square"></i>
+                          </button>
+                          <button
+                            onClick={(e) => handleDeleteProduct(e, product._id, product.name)}
+                            style={{ background: "#ec6869", border: "none", color: "#fff", padding: "4px 8px", borderRadius: "4px", cursor: "pointer" }}
+                            title="Delete Product"
+                          >
+                            <i className="fa-solid fa-trash"></i>
+                          </button>
+                        </h5>
                       </div>
                     ))}
                   </div>)}
+
             
-                {/* Show the ProductForm if a product is selected */}
-                  {showForm && (
-                    <ProductForm
-                      initialProduct={selectedProduct}
-                      mode={formMode}
-                      onClose={() => {
-                        setShowForm(false);
-                        setSelectedProduct(null);
-                      }}
-                      refreshProducts={refreshProducts}
-                    />
-                  )}
                 {/*Shows the searched medicine If any*/ }
+
                 {indextab >= 0 && (
                     <div className="invtable">
                         <div

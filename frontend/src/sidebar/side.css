@@ -1,13 +1,7 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-.sbar{
+.sbar {
     height: 100vh;
-    width:15vw;
-    background-color:#0a2249;
+    width: 240px;
+    background-color: var(--bg-sidebar);
     position: fixed;
     top: 0;
     left: 0;
@@ -15,75 +9,103 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    z-index: 100;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
 }
-.heading{
-    height: 10%;
+
+.heading {
+    height: 80px;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-.sbar h1{
+
+.sbar h1 {
     color: #F8F9FA;
     text-align: center;
-    padding: 10px;
     font-size: 1.5rem;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
-.options{
-    height: 70%;
+
+.options {
+    flex: 1;
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items:flex-end;
-    justify-content: space-evenly;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding-top: 20px;
+    gap: 8px;
 }
-.opt{
-    height:10%;
-    width:100%;
-    margin-top: -50%;
+
+.opt {
+    height: 46px;
+    width: 90%;
+    margin: 0 auto;
+    border-radius: 8px;
     display: flex;
     align-items: center;
-    justify-content:flex-start;
-    transition: all 0.1s linear;
+    justify-content: flex-start;
+    transition: all 0.2s ease;
     cursor: pointer;
+    padding: 0 12px;
 }
-.opt:hover{
+
+.opt:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+.opt.active {
     background-color: #0767f6;
+    box-shadow: 0 4px 12px rgba(7, 103, 246, 0.35);
 }
-.opt a{
+
+.opt a {
     text-decoration: none;
     color: #F8F9FA;
-    font-size: 1rem;
+    font-size: 0.95rem;
+    font-weight: 500;
 }
-.icon{
-    color:#F8F9FA;
-    font-size: 1rem;
-    margin-left: 30px;
-    margin-right: 10px;
+
+.icon {
+    color: #F8F9FA;
+    font-size: 1.1rem;
+    margin-left: 8px;
+    margin-right: 14px;
+    width: 20px;
+    text-align: center;
 }
-.logout{
-    height:10%;
-    width:100%;
+
+.logout {
+    height: 80px;
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
-.logout button{
-    height: 50%;
-    width:50%;
+
+.logout button {
+    height: 42px;
+    width: 80%;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     background-color: #ec6869;
-    color:#F8F9FA;
-    font-size: 1rem;
-    transition: all 0.3s linear;
+    color: #F8F9FA;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
-.logout button:hover{
+
+.logout button:hover {
     background-color: #C82333;
-}
-.active{
-    background-color: #0767f6;
+    transform: translateY(-1px);
 }

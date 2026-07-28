@@ -8,63 +8,71 @@ import undraw_medical_care_7m9g from "./assets/undraw_medical-care_7m9g.svg";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import "./login.css"
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "./api/axios";
 import toast from "react-hot-toast";
 
 export default function Login() {
+
   const navigate = useNavigate();
   const [user, setUser] = useState({
-    name:"",
-    password:"",
-    email:"",
+    name: "",
+    password: "",
+    email: "",
   });
-  const handleSubmit = async(e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`https://med-track.onrender.com/api/users/login`,user,{
-        headers:{
-          "Content-Type":"application/json"
-        },
-        withCredentials:true
-      })
-      if (res.status === 200) {  // Ensure request was successful
-        navigate("/dashboard");
-        toast.success(res.data.message || "Login successful!");
+      const res = await api.post("/users/login", {
+        name: user.name,
+        password: user.password,
+      });
+
+      if (res.data?.token) {
+        localStorage.setItem("token", res.data.token);
       }
+      if (res.data) {
+        localStorage.setItem("userInfo", JSON.stringify(res.data));
+      }
+
+      toast.success(res.data.message || "Login successful!");
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login Error:", error);
       toast.error(error.response?.data?.message || "Login failed!");
     }
     setUser({
-      name:"",
-      email:"",
-      password:""
+      name: "",
+      email: "",
+      password: "",
     });
   };
 
-  const handleSubmit1 = async(e) => {
+  const handleSubmit1 = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`https://med-track.onrender.com/api/users/register`,user,{
-        headers:{
-          "Content-Type":"application/json"
-        },
-        withCredentials:true
-      })
-      if (res.status === 201) {  // Ensure request was successful
-        navigate("/dashboard");
-        toast.success(res.data.message || "Registration successful!");
+      const res = await api.post("/users/register", user);
+
+      if (res.data?.token) {
+        localStorage.setItem("token", res.data.token);
       }
+      if (res.data) {
+        localStorage.setItem("userInfo", JSON.stringify(res.data));
+      }
+
+      toast.success(res.data.message || "Registration successful!");
+      navigate("/dashboard");
     } catch (error) {
-      console.error("Login Error:", error);
+      console.error("Registration Error:", error);
       toast.error(error.response?.data?.message || "Registration failed!");
     }
     setUser({
-      name:"",
-      email:"",
-      password:""
+      name: "",
+      email: "",
+      password: "",
     });
   };
+
 
   useEffect(() => {
     const sign_in_btn = document.querySelector("#sign-in-btn");

@@ -1,45 +1,70 @@
-import express from "express"
-import "dotenv/config";
+import express from "express";
+import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
+
 import connectDB from "./config/database.js";
+
 import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import feedbackRoutes from "./routes/feedbackRoutes.js";
+
 import errorHandler from "./middlewares/errorMiddleware.js";
-import cookieParser from "cookie-parser";
-import bodyParser from "body-parser";
 
+dotenv.config();
 
-//initialize the app
 const app = express();
+
+// Connect to MongoDB
+connectDB();
+
+// Middlewares
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(bodyParser.json());
 
-// app.use((req, res, next) => {
-//     console.log("Cookies received:", req.cookies);
-//     next();
-//   });
+// CORS
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://med-track-frontend.onrender.com",
+];
 
-const corsOption={
-    origin:'https://med-track-frontend.onrender.com',
-    credentials: true
-}
-app.use(cors(corsOption));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (Postman, mobile apps)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
+// Debug: log every incoming request
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.originalUrl}`);
+  next();
+});
 
 // Routes
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/feedback", feedbackRoutes);
 
-//middlewares
+
+// Error Handler
 app.use(errorHandler);
 
-//starting the server and connecting to database
-const PORT = process.env.PORT || 5000;
+// Start Server
+const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
-    connectDB();
-    console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`);
 });

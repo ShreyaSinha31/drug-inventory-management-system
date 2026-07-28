@@ -3,11 +3,9 @@ import { FaTachometerAlt } from 'react-icons/fa'; // Dashboard
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { useNavigate } from "react-router-dom";
-//import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios";
 import toast from "react-hot-toast";
-
 
 export default function Sidebar() {
 
@@ -15,15 +13,18 @@ export default function Sidebar() {
 
     const handleLogout = async () => {
         try {
-            await axios.post("https://med-track.onrender.com/api/users/logout", {}, { withCredentials: true });
-
-            navigate("/"); // Redirect to login page
-            toast.success("Logout successful!");
+            await api.post("/users/logout");
+            toast.success("Logged out successfully.");
         } catch (error) {
-            console.error("Logout failed:", error.response?.data || error.message);
-            toast.error(error.response?.data?.message || "Logout failed!");
+            console.error("Logout request error:", error);
+            toast.error(error.response?.data?.message || "Logout failed. Please try again.");
+        } finally {
+            localStorage.clear();
+            sessionStorage.clear();
+            navigate("/", { replace: true });
         }
     };
+
     let activeindex = 0;
     const location = useLocation(); // Access the location object
     const currentPath = location.pathname;

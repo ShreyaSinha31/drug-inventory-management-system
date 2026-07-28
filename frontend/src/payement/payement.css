@@ -1,0 +1,124 @@
+.payments-page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    color: var(--text-primary);
+}
+
+.payments-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.payments-header p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.payments-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    width: 100%;
+}
+
+.payments-kpi-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 4px 15px var(--shadow-color);
+    transition: transform 0.2s ease;
+}
+
+.payments-kpi-card:hover {
+    transform: translateY(-3px);
+}
+
+.payments-kpi-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
+.payments-kpi-info span {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.payments-kpi-info h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-top: 2px;
+}
+
+.payments-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 16px 20px;
+    border-radius: 12px;
+}
+
+.payments-status-tabs {
+    display: flex;
+    gap: 12px;
+}
+
+.payments-status-tabs p {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding-bottom: 6px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.payments-status-tabs p.active-tab {
+    border-bottom: 3px solid #329dff;
+    color: #329dff !important;
+}
+
+.payments-badge-paid {
+    color: #10b981;
+    background-color: rgba(16, 185, 129, 0.12);
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.payments-badge-pending {
+    color: #f9d50a;
+    background-color: rgba(249, 213, 10, 0.15);
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.payments-badge-failed {
+    color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.12);
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.8rem;
+}

@@ -1,22 +1,20 @@
 import React from 'react';
-import { Outlet, useLocation } from 'react-router-dom'; // Import useLocation for current route check
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import "./dash.css";
 import Navbar from '../navbar/navabar.jsx';
 import Sidebar from '../sidebar/sidebar.jsx';
-import { useNavigate } from 'react-router-dom';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from "chart.js"
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from "chart.js";
 import { Bar, Doughnut } from 'react-chartjs-2';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import moment from 'moment';
-//import products from "../products.json"
+import FloatingBot from '../chatbot/FloatingBot.jsx';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend);
 
 export default function Dashboard() {
-  
-  const location = useLocation(); // Get the current location (path)
-  const isChildRoute = location.pathname !== "/dashboard"; // Check if the current route is not '/dashboard'
+  const location = useLocation();
+  const isChildRoute = location.pathname !== "/dashboard" && location.pathname !== "/dashboard/";
   const navigate = useNavigate();
 
   const [products, setProducts] = useState([]);
@@ -27,31 +25,21 @@ export default function Dashboard() {
   const [outOfstockCount, setOutOfStockCount] = useState(0);
 
   useEffect(() => {
-    // Fetch products on component mount
     const fetchProducts = async () => {
       try {
-        // Sending GET request to fetch products from the backend
-        const response = await axios.get('http://localhost:8080/api/products', {
-          withCredentials: true, // Ensure cookies (including token) are sent with request
-        });
-          console.log("API Response:", products); // Debugging
-          // console.log(response.data.totalPrice);
-          // console.log(response.data.totalQuantity);
-          
-            setProducts(response.data.products || []);
-            setTotalQuantity(response.data.totalQuantity || 0);
-            setTotalPrice(response.data.totalPrice || 0);
-            setLowStockCount(response.data.lowStockCount || 0); // Set low stock count state
-            setOutOfStockCount(response.data.outOfstockCount || 0);
-
+        const response = await api.get('/products');
+        setProducts(response.data.products || []);
+        setTotalQuantity(response.data.totalQuantity || 0);
+        setTotalPrice(response.data.totalPrice || 0);
+        setLowStockCount(response.data.lowStockCount || 0);
+        setOutOfStockCount(response.data.outOfStockCount || response.data.outOfstockCount || 0);
       } catch (error) {
-        // Handle error, if any
         console.error("Error fetching products:", error);
         setError("Failed to fetch products. Please try again later.");
       }
     };
 
-    fetchProducts(); // Call the function to fetch products
+    fetchProducts();
   }, []);
 
   return (
@@ -67,166 +55,188 @@ export default function Dashboard() {
                 <p>A quick overview of the Inventory</p>
               </div>
             </div>
+
             <div className="details">
-              <div className="card up" style={{ backgroundColor: "#329dff" }} onClick={() => { navigate('/dashboard/inventory') }}>
+              <div className="card up" style={{ backgroundColor: "#329dff" }} onClick={() => navigate('/dashboard/inventory')}>
                 <div className="info">
                   <div className="icon">
-                    <i className="fa-solid fa-plus" style={{ color: "#329dff" }}></i>
+                    <i className="fa-solid fa-boxes-stacked" style={{ color: "#329dff" }}></i>
                   </div>
                   <div className="about">
-                    <p>Inventory</p>
-                    <h2>${totalPrice}</h2>
+                    <p>Inventory Value</p>
+                    <h2>{'\u20B9'}{totalPrice.toLocaleString()}</h2>
                   </div>
                 </div>
                 <div className="know">
-                  <p>Know More</p>
+                  <p>Know More <i className="fa-solid fa-arrow-right"></i></p>
                 </div>
               </div>
-              <div className="card up" style={{ backgroundColor: "#1dbfc6" }} onClick={() => { navigate('/dashboard/sales') }}>
+
+              <div className="card up" style={{ backgroundColor: "#1dbfc6" }} onClick={() => navigate('/dashboard/sales')}>
                 <div className="info">
                   <div className="icon">
-                    <i className="fa-solid fa-money-bill" style={{ color: "#1dbfc6" }}></i>
+                    <i className="fa-solid fa-indian-rupee-sign" style={{ color: "#1dbfc6" }}></i>
                   </div>
                   <div className="about">
                     <p>Revenue</p>
-                    <h2>$35</h2>
+                    <h2>{'\u20B9'}35,000</h2>
                   </div>
                 </div>
                 <div className="know">
-                  <p>Know More</p>
+                  <p>Know More <i className="fa-solid fa-arrow-right"></i></p>
                 </div>
               </div>
-              <div className="card up" style={{ backgroundColor: "#f9d50a" }} onClick={() => { navigate('/dashboard/inventory') }}>
-                <div className="info">
-                  <div className="icon">
-                    <i className="fa-solid fa-plus" style={{ color: "#f9d50a" }}></i>
-                  </div>
-                  <div className="about">
-                    <p style={{ marginLeft: "0%" }}>Availability</p>
-                    <h2>{totalQuantity}</h2>
-                  </div>
-                </div>
-                <div className="know">
-                  <p>Know More</p>
-                </div>
-              </div>
-              <div className="card up" style={{ backgroundColor: "#ec6869" }} onClick={() => { navigate('/dashboard/inventory') }}>
-                <div className="info">
-                  <div className="icon">
-                    <i className="fa-solid fa-circle-exclamation" style={{ color: "#ec6869" }}></i>
-                  </div>
-                  <div className="about">
-                    <p>Shortage</p>
-                    <h2>{lowStockCount}</h2>
-                  </div>
-                </div>
-                <div className="know">
-                  <p>Know More</p>
-                </div>
-              </div>
-            </div>
-            <div className="chart">
-              <div className="bargraph mup" onClick={() => { navigate('/dashboard/sales') }} style={{ width: "50%" }}>
-                <h3>Total Sales</h3>
-                <Bar
-                  data={{
-                    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-                    datasets: [
-                      {
-                        label: "Total Sale",
-                        data: [7000, 15000, 8000, 10000, 3000, 12000, 16000],
-                        backgroundColor: "#329dff",
-                        borderRadius: 10,
-                        barPercentage: 0.9,
-                        hoverBackgroundColor: "#0c2c61",
-                        categoryPercentage: 0.5,
-                      },
-                    ],
-                  }}
-                  options={{
-                    responsive: true,
-                    plugins: {
-                      legend: { display: false },
-                      tooltip: {
-                        callbacks: {
-                          label: (tooltipItem) => `$ ${tooltipItem.raw / 1000}K`,
-                        },
-                      },
-                    },
-                    scales: {
-                      y: {
-                        ticks: {
-                          callback: (value) => `$ ${value / 1000}K`,
-                        },
-                        grid: { drawBorder: false },
-                      },
-                      x: {
-                        grid: { display: false },
-                      },
-                    },
-                  }}
-                />
-              </div>
-              <div className="piechart mup" onClick={() => { navigate('/dashboard/inventory') }} style={{ width: "25%" }}>
-                <h3>Inventory</h3>
-                <Doughnut
-                  data={{
-                    labels: ["Total product", "Out of stock", "Return", "Expire"],
-                    datasets: [
-                      {
-                        data: [40, 20, 15, 25],
-                        backgroundColor: ["#329DFF", "#EC6869", "#F9D50A", "#000"],
-                        borderWidth: 0,
-                        cutout: "70%",
-                        borderRadius: 5,
-                        spacing: 5,
-                      },
-                    ],
-                  }}
-                  options={{
-                    responsive: true,
-                    plugins: {
-                      legend: {
-                        position: "right",
-                        labels: { usePointStyle: true, boxWidth: 8 },
-                      },
-                      tooltip: {
-                        callbacks: {
-                          label: (tooltipItem) => `${tooltipItem.raw}%`,
-                        },
-                      },
-                    },
-                  }}
-                />
-              </div>
-            </div>
-            <div className="recived" onClick={() => { navigate('/dashboard/inventory') }}>
-              <div className="pro">
-    <h2>Products</h2>
-    <div className="header">
-      <h4>Sl. No.</h4>
-      <h4>Name</h4>
-      <h4>Price</h4>
-      <h4>Qty.</h4>
-      <h4>Expiry</h4>
-    </div>
-    {products.slice(0,5).map((product, index) => (
-      <div className="all" key={product._id}>
-        <h5>{index + 1}</h5> {/* Fix: Using index directly */}
-        <h5>{product.name}</h5>
-        <h5>{product.price}</h5>
-        <h5>{product.quantity}</h5>
-        <h5>{moment(product.expDate).format("DD-MM-YYYY")}</h5> {/* Fix: Proper date formatting */}
-      </div>
-    ))}
-  </div>
 
+              <div className="card up" style={{ backgroundColor: "#f9d50a" }} onClick={() => navigate('/dashboard/inventory')}>
+                <div className="info">
+                  <div className="icon">
+                    <i className="fa-solid fa-cubes" style={{ color: "#f9d50a" }}></i>
+                  </div>
+                  <div className="about">
+                    <p>Availability</p>
+                    <h2>{totalQuantity} Units</h2>
+                  </div>
+                </div>
+                <div className="know">
+                  <p>Know More <i className="fa-solid fa-arrow-right"></i></p>
+                </div>
+              </div>
+
+              <div className="card up" style={{ backgroundColor: "#ec6869" }} onClick={() => navigate('/dashboard/inventory')}>
+                <div className="info">
+                  <div className="icon">
+                    <i className="fa-solid fa-triangle-exclamation" style={{ color: "#ec6869" }}></i>
+                  </div>
+                  <div className="about">
+                    <p>Shortage / Low Stock</p>
+                    <h2>{lowStockCount} Items</h2>
+                  </div>
+                </div>
+                <div className="know">
+                  <p>Know More <i className="fa-solid fa-arrow-right"></i></p>
+                </div>
+              </div>
+            </div>
+
+            <div className="chart">
+              <div className="bargraph mup" onClick={() => navigate('/dashboard/sales')}>
+                <h3>Total Sales Overview</h3>
+                <div className="chart-container">
+                  <Bar
+                    data={{
+                      labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                      datasets: [
+                        {
+                          label: "Total Sale (\u20B9)",
+                          data: [7000, 15000, 8000, 10000, 3000, 12000, 16000],
+                          backgroundColor: "#329dff",
+                          borderRadius: 8,
+                          barPercentage: 0.6,
+                          hoverBackgroundColor: "#0c2c61",
+                        },
+                      ],
+                    }}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                          callbacks: {
+                            label: (tooltipItem) => `\u20B9 ${tooltipItem.raw.toLocaleString()}`,
+                          },
+                        },
+                      },
+                      scales: {
+                        y: {
+                          ticks: {
+                            callback: (value) => `\u20B9${value / 1000}K`,
+                          },
+                          grid: { color: "rgba(150, 150, 150, 0.1)" },
+                        },
+                        x: {
+                          grid: { display: false },
+                        },
+                      },
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="piechart mup" onClick={() => navigate('/dashboard/inventory')}>
+                <h3>Inventory Status</h3>
+                <div className="chart-container">
+                  <Doughnut
+                    data={{
+                      labels: ["In Stock", "Out of Stock", "Low Stock", "Expired"],
+                      datasets: [
+                        {
+                          data: [
+                            products.filter(p => p.quantity > 75).length || 40,
+                            outOfstockCount || 10,
+                            lowStockCount || 15,
+                            5
+                          ],
+                          backgroundColor: ["#329DFF", "#EC6869", "#F9D50A", "#6c757d"],
+                          borderWidth: 0,
+                          cutout: "70%",
+                          borderRadius: 4,
+                          spacing: 4,
+                        },
+                      ],
+                    }}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      plugins: {
+                        legend: {
+                          position: "bottom",
+                          labels: { usePointStyle: true, boxWidth: 8, padding: 15 },
+                        },
+                        tooltip: {
+                          callbacks: {
+                            label: (tooltipItem) => ` ${tooltipItem.label}: ${tooltipItem.raw}`,
+                          },
+                        },
+                      },
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="recived" onClick={() => navigate('/dashboard/inventory')}>
+              <div className="pro">
+                <h2>Top Inventory Products</h2>
+                <div className="header">
+                  <h4>Sl. No.</h4>
+                  <h4>Name</h4>
+                  <h4>Price</h4>
+                  <h4>Qty.</h4>
+                  <h4>Expiry</h4>
+                </div>
+                {products.length > 0 ? (
+                  products.slice(0, 5).map((product, index) => (
+                    <div className="all" key={product._id || index}>
+                      <h5>{index + 1}</h5>
+                      <h5>{product.name}</h5>
+                      <h5>{'\u20B9'}{product.price}</h5>
+                      <h5>{product.quantity}</h5>
+                      <h5>{product.expDate ? moment(product.expDate).format("DD-MM-YYYY") : "N/A"}</h5>
+                    </div>
+                  ))
+                ) : (
+                  <div className="all">
+                    <h5 style={{ flex: 5, textCenter: "center" }}>No products available. Click to manage inventory.</h5>
+                  </div>
+                )}
+              </div>
             </div>
           </>
         ) : null}
 
         <Outlet />
-        {/* Render nested routes here */}
+        <FloatingBot />
       </div>
     </div>
   );

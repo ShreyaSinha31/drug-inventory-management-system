@@ -1,12 +1,14 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import './index.css';
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+
 import Login from './login.jsx';
 import Dashboard from './dashboard/dashboard.jsx';
-//import PrivateRoute from './privateroute.jsx';
+import PrivateRoute from './privateroute.jsx';
 import {Toaster} from "react-hot-toast" ;
 import Chat from './chatbot/chat.jsx';
 import Feed from './feedback/feed.jsx';
@@ -16,6 +18,8 @@ import Sales from './sales/sales.jsx';
 import Payement from './payement/payement.jsx';
 
 
+import { ThemeProvider } from './context/ThemeContext.jsx';
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -24,7 +28,9 @@ const router = createBrowserRouter([
   {
     path: "dashboard",
     element: (
+      <PrivateRoute>
         <Dashboard />
+      </PrivateRoute>
     ),
     children: [
       { path: "inventory", element: <Inventory /> },
@@ -37,11 +43,13 @@ const router = createBrowserRouter([
   },
 ]);
 
+
 createRoot(document.getElementById('root')).render(
-
   <StrictMode>
-    <Toaster />
-    <RouterProvider router={router} />
+    <ThemeProvider>
+      <Toaster />
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </StrictMode>
-
 )
+

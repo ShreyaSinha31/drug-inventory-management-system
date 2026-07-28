@@ -37,42 +37,53 @@ export const getProductById = async (req, res) => {
 // ✅ Create a new product (Automatically assigns the user as the owner)
 export const createProduct = async (req, res) => {
   try {
-    const { name, description, price, quantity, category, expDate, mfgDate } = req.body;
-    console.log("Received Data:", req.body);
-    // Ensure required fields are provided
-    if (!name || !price || !quantity || !expDate) {
-      return res.status(400).json({ message: "All required fields must be filled" });
+    const { name, description, price, quantity, category, expDate, mfgDate, drugId, manufacturer, batchNumber, supplier } = req.body;
+    console.log("Received Product Data:", req.body);
+
+    if (!name || price === undefined || quantity === undefined || !expDate) {
+      return res.status(400).json({ message: "Product Name, Price, Quantity, and Expiry Date are required" });
     }
 
-    //console.log(req.user.id);
+    const finalDrugId = drugId && drugId.trim() !== '' ? drugId.trim() : `DRUG-${Math.floor(100000 + Math.random() * 900000)}`;
 
-    const pdct = await Product.findOne({name});
-       if(pdct) {
-        return res.status(400).json({
-            message: " Product already exists try Updating or Create Another product"
-        })
-       }
-    // Create a new product associated with the logged-in user
-    const product = await Product.create({
-      user: req.user.id,  // Assign the logged-in user as the product owner
-      name,
-      description,
-      price,
-      quantity,
-      category,
-      expDate,
-      mfgDate
+    const existingProduct = await Product.findOne({
+      user: req.user.id,
+      name: name.trim()
     });
+
+    if (existingProduct) {
+      return res.status(400).json({
+        message: "A product with this name already exists in your inventory."
+      });
+    }
+
+    const product = await Product.create({
+      user: req.user.id,
+      drugId: finalDrugId,
+      name: name.trim(),
+      description: description || "",
+      price: Number(price),
+      quantity: Number(quantity),
+      category: category || "General",
+      manufacturer: manufacturer || "Standard Pharma",
+      batchNumber: batchNumber || `BATCH-${Math.floor(1000 + Math.random() * 9000)}`,
+      supplier: supplier || "Pharma Supply Co.",
+      expDate,
+      mfgDate: mfgDate || Date.now()
+    });
+
     if (product) {
       res.status(201).json(product);
     } else {
       res.status(400).json({ message: "Failed to create product" });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Create Product Error:", error);
+    res.status(500).json({ message: error.message || "Server error creating product" });
   }
 };
+
+
 
 // ✅ Update a product (Only if the user owns it)
 export const updateProduct = async (req, res) => {

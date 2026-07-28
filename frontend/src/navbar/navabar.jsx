@@ -1,40 +1,72 @@
-import "./navbar.css"
-import profile  from "../assets/profile.webp"
+import "./navbar.css";
+import profile from "../assets/demo_avatar.jpg";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api/axios";
+import { useTheme } from "../context/ThemeContext";
+import ProfileModal from "../profile/ProfileModal.jsx";
 
 export default function Navbar() {
-
- const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const res = await axios.get("https://med-track.onrender.com/api/users/profile", {
-          withCredentials: true, // Ensures cookies are sent with the request
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const res = await api.get("/users/profile");
         setUser(res.data);
       } catch (error) {
         console.error("Error fetching user profile:", error);
+        const storedUser = localStorage.getItem("user") || localStorage.getItem("userInfo");
+        if (storedUser) {
+          try {
+            setUser(JSON.parse(storedUser));
+          } catch (e) {}
+        }
       }
     };
 
     fetchUserProfile();
   }, []);
-    return (<div className="nbar">
-        <div className="search"><input type="text" placeholder="Search here..." /><i class="fa-solid fa-magnifying-glass"></i></div>
+
+  return (
+    <>
+      <div className="nbar">
+        <div className="search">
+          <input type="text" placeholder="Search drug inventory, orders..." />
+          <i className="fa-solid fa-magnifying-glass"></i>
+        </div>
         <div className="option">
-        <i class="fa-solid fa-language"></i>
-        <p>English(US)</p>
-        <i class="fa-solid fa-sun"></i>
-        <i class="fa-solid fa-bell"></i>
+          <i className="fa-solid fa-language" title="Language"></i>
+          <p>English(US)</p>
+          <i
+            className={`fa-solid ${theme === "dark" ? "fa-sun" : "fa-moon"} theme-toggle-btn`}
+            onClick={toggleTheme}
+            title={`Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`}
+          ></i>
+          <i className="fa-solid fa-bell" title="Notifications"></i>
         </div>
-        <div className="profile">
-            <div className="picture"><img src={user ? user.pfp : profile} alt ="" /></div>
-            <div className="info"><p>{user ? user.name : "Guest"}</p></div>
+        <div className="profile" onClick={() => setIsProfileOpen(true)} style={{ cursor: 'pointer' }}>
+          <div className="picture">
+            <img 
+              src={profile} 
+              alt="User Avatar" 
+              onError={(e) => { e.target.onerror = null; e.target.src = profile; }}
+            />
+          </div>
+          <div className="info">
+            <p>{user?.name || "Admin User"}</p>
+          </div>
         </div>
-    </div>)
+      </div>
+
+      <ProfileModal 
+        isOpen={isProfileOpen} 
+        onClose={() => setIsProfileOpen(false)} 
+        onUserUpdated={(updatedUser) => setUser(updatedUser)} 
+      />
+    </>
+  );
 }
+
+
